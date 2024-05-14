@@ -663,6 +663,8 @@ class LogXML:
             )
             logfile.write('<?xml version="1.0" encoding="utf-8"?>')
 
+            tzinfo = datetime.now().astimezone().tzinfo
+
             suite_node = ET.Element(
                 "testsuite",
                 name=self.suite_name,
@@ -671,7 +673,9 @@ class LogXML:
                 skipped=str(self.stats["skipped"]),
                 tests=str(numtests),
                 time=f"{suite_time_delta:.3f}",
-                timestamp=datetime.fromtimestamp(self.suite_start_time).isoformat(),
+                timestamp=datetime.fromtimestamp(
+                    self.suite_start_time, tzinfo
+                ).isoformat(),
                 hostname=platform.node(),
             )
             global_properties = self._get_global_properties_node()
